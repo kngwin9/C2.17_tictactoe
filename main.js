@@ -16,12 +16,18 @@ $(document).ready(function(){
     game.createPlayers()
 });
 function gameConstructor(main){
+    //brian temp
+    this.gCounter = null;
+    //end brian temp
     var self=this;
     this.element = main;
     this.cellArray = [];
     this.players =[];
     this.currentPlayer = 0;
     this.createCells = function(amountCells){
+        //brian temp
+        this.gCounter = 0;
+        //brian temp
         this.element.empty();
         this.cellArray=[];
         for (var i=0;i<amountCells;i++) {
@@ -54,10 +60,12 @@ function gameConstructor(main){
     this.cellClicked =function(clickedCell){
         self.players[self.currentPlayer].deactivatePlayer();
         self.checkWinningCondition();
+        // self.checkDrawCondition();
         self.switchPlayers();
         self.players[self.currentPlayer].activePlayer();
     };
     this.checkWinningCondition=function(){
+        game.gCounter++;
         var arr = game.cellArray;
         var rowLength = Math.sqrt(arr.length);
         //diagonal to right
@@ -67,6 +75,8 @@ function gameConstructor(main){
                 counter++;
             }
             if (counter === rowLength){
+                // document.getElementById('modal_outcome_draw').innerHTML="OK";
+                $('#modal_outcome_draw').hide();
                 modal_display();
                 return;
             }
@@ -78,6 +88,7 @@ function gameConstructor(main){
                 counter++;
             }
             if (counter===rowLength){
+                $('#modal_outcome_draw').hide();
                 modal_display();
                 return
             }
@@ -92,6 +103,7 @@ function gameConstructor(main){
                     counter++;
                 }
                 if (counter===rowLength){
+                    $('#modal_outcome_draw').hide();
                     modal_display();
                     return
                 }
@@ -107,6 +119,7 @@ function gameConstructor(main){
                     counter++;
                  }
                 if (counter===rowLength){
+                    $('#modal_outcome_draw').hide();
                     modal_display();
                     return
                 }
@@ -114,6 +127,13 @@ function gameConstructor(main){
             }
             y=z;
             counter = 0;
+        }
+        //brian temp
+        if (counter !== rowLength && game.gCounter === game.cellArray.length){
+            $('#modal_outcome_win').hide();
+            modal_display();
+            // alert("DRAW");
+            return
         }
     };
 }
@@ -159,5 +179,9 @@ var playerFactory = function(symbol, element){
     }
 };
 function modal_display() {
+    // $('#modal_outcome_win').hide();
+    // $('#modal_outcome_draw').hide()
+    // $('#modal_outcome_win').css("display","none");
+    // $('#modal_outcome_draw').css("display", "none");
     $("#myModal").modal();
 }
